@@ -5,8 +5,10 @@
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Blaster/HUD/OverHeadWidget.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/PlayerState.h"
 #include "GameFramework/SpringArmComponent.h"
 
 
@@ -82,4 +84,6 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&ABlasterCharacter::Move);
 	}
 }
+
+
 

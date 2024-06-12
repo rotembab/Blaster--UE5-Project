@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Blaster/Character/BlasterCharacter.h"
 #include "Blueprint/UserWidget.h"
 #include "OverHeadWidget.generated.h"
 
@@ -16,6 +17,7 @@ class BLASTER_API UOverHeadWidget : public UUserWidget
 
 protected:
 	virtual void NativeDestruct() override;
+	virtual void NativeConstruct() override;
 	
 public:
 	UPROPERTY(meta=(BindWidget))

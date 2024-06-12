@@ -13,6 +13,15 @@ void UOverHeadWidget::NativeDestruct()
 
 }
 
+void UOverHeadWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+	if(DisplayText)
+	{
+		DisplayText->SetText(FText::FromString(TEXT("")));
+	}
+}
+
 void UOverHeadWidget::SetDisplayText(FString TextToDisplay)
 {
 	if(DisplayText)
@@ -47,23 +56,14 @@ void UOverHeadWidget::ShowPlayerNetRole(APawn* Pawn)
 
 void UOverHeadWidget::ShowPlayerName(APawn* Pawn)
 {
-	ENetRole RemoteRole = Pawn->GetRemoteRole();
-	ENetRole LocalRole = Pawn->GetLocalRole();
-
-	// if(RemoteRole == ROLE_AutonomousProxy || LocalRole ==ROLE_AutonomousProxy)
-	// {
-	// 	SetDisplayText(FString((TEXT("YOU"))));
-	// }else
-	// {
-		APlayerState* PlayerState = Pawn->GetPlayerState<APlayerState>();
-		if(PlayerState!=nullptr)
-		{
-			SetDisplayText(PlayerState->GetPlayerName());
-		}else
-		{
-			SetDisplayText((TEXT("Could not find PlayerState")));
-		}
-	// }
+			APlayerState* PlayerState = Pawn->GetPlayerState();
+			if(PlayerState!=nullptr)
+			{
+				SetDisplayText(PlayerState->GetPlayerName());
+			}else
+			{
+				SetDisplayText((TEXT("Could not find PlayerState")));
+			}
 }
 
 
