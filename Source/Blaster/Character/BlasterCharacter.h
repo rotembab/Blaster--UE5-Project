@@ -6,24 +6,41 @@
 #include "GameFramework/Character.h"
 #include "BlasterCharacter.generated.h"
 
+struct FInputActionValue;
+
+
 UCLASS()
 class BLASTER_API ABlasterCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ABlasterCharacter();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+protected:
+	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputMappingContext* InputMappingContext;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* JumpAction ;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* LookAction ;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* MoveAction;
+
+	void Move(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
+private:
+	UPROPERTY(VisibleAnywhere, Category=Camera)
+	class USpringArmComponent* CameraBoom;
+	UPROPERTY(VisibleAnywhere, Category=Camera)
+	class UCameraComponent* FollowCamera;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,meta=(AllowPrivateAccess="true"))
+	class UWidgetComponent* OverheadWidget;
+public:
+	
+	
 };
