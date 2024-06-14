@@ -5,6 +5,7 @@
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Blaster/BlasterComponents/CombatComponent.h"
 #include "Blaster/HUD/OverHeadWidget.h"
 #include "Blaster/Weapon/Weapon.h"
 #include "Components/WidgetComponent.h"
@@ -32,12 +33,25 @@ ABlasterCharacter::ABlasterCharacter()
 	
 	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>("OverheadWidget");
 	OverheadWidget->SetupAttachment(RootComponent);
+
+	Combat = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
+	Combat->SetIsReplicated(true);
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME_CONDITION(ABlasterCharacter,OverlappingWeapon,COND_OwnerOnly);
+}
+
+void ABlasterCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	if(Combat)
+	{
+		Combat->Character = this;
+	}
+	
 }
 
 void ABlasterCharacter::BeginPlay()
@@ -69,6 +83,14 @@ void ABlasterCharacter::Look(const FInputActionValue& Value)
 	FVector2D LookInput = Value.Get<FVector2D>(); //getting move input 2d axis value
 	AddControllerYawInput(LookInput.X);
 	AddControllerPitchInput(-1* LookInput.Y);
+}
+
+void ABlasterCharacter::Equip(const FInputActionValue& Value)
+{
+	if(Combat && HasAuthority())
+	{
+		Combat->EquipWeapon(OverlappingWeapon);
+	}
 }
 
 void ABlasterCharacter::OnRep_OverLappingWeapon(AWeapon* LastWeapon)
@@ -118,6 +140,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Completed,this,&ABlasterCharacter::StopJumping);
 		EnhancedInputComponent->BindAction(LookAction,ETriggerEvent::Triggered,this,&ABlasterCharacter::Look);
 		EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&ABlasterCharacter::Move);
+		EnhancedInputComponent->BindAction(EquipAction,ETriggerEvent::Started,this,&ABlasterCharacter::Equip);
 	}
 }
 
