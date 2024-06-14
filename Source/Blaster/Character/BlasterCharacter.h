@@ -59,5 +59,6 @@ private:
 	void ServerEquipButtonPressed();
 public:
 	 void SetOverLappingWeapon(AWeapon* Weapon);
+	bool IsWeaponEquipped();
 	
 };
