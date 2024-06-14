@@ -36,6 +36,8 @@ ABlasterCharacter::ABlasterCharacter()
 
 	Combat = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
 	Combat->SetIsReplicated(true);
+
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -100,6 +102,17 @@ void ABlasterCharacter::Equip(const FInputActionValue& Value)
 	}
 }
 
+void ABlasterCharacter::CrouchBtn(const FInputActionValue& Value)
+{
+	if(bIsCrouched)
+	{
+		UnCrouch();
+	}else
+	{
+		Crouch();
+	}
+}
+
 void ABlasterCharacter::OnRep_OverLappingWeapon(AWeapon* LastWeapon)
 {
 	if(OverlappingWeapon)
@@ -161,6 +174,7 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(LookAction,ETriggerEvent::Triggered,this,&ABlasterCharacter::Look);
 		EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&ABlasterCharacter::Move);
 		EnhancedInputComponent->BindAction(EquipAction,ETriggerEvent::Started,this,&ABlasterCharacter::Equip);
+		EnhancedInputComponent->BindAction(CrouchAction,ETriggerEvent::Started,this,&ABlasterCharacter::CrouchBtn);
 	}
 }
 

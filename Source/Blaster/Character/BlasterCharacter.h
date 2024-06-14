@@ -34,9 +34,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* EquipAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* CrouchAction;
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Equip(const FInputActionValue& Value);
+	void CrouchBtn(const FInputActionValue& Value);
 private:
 	UPROPERTY(VisibleAnywhere, Category=Camera)
 	class USpringArmComponent* CameraBoom;
@@ -52,11 +56,14 @@ private:
 	UFUNCTION()
 	void OnRep_OverLappingWeapon(AWeapon* LastWeapon);
 
+
+
 	UPROPERTY(VisibleAnywhere)
 	class UCombatComponent* Combat;
 
 	UFUNCTION(Server,Reliable)
 	void ServerEquipButtonPressed();
+
 public:
 	 void SetOverLappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
