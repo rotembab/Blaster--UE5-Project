@@ -18,6 +18,7 @@ public:
 	ABlasterCharacter();
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void  GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 protected:
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -39,7 +40,13 @@ private:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,meta=(AllowPrivateAccess="true"))
 	class UWidgetComponent* OverheadWidget;
+
+	UPROPERTY(ReplicatedUsing = OnRep_OverLappingWeapon)
+	class AWeapon* OverlappingWeapon;
+
+	UFUNCTION()
+	void OnRep_OverLappingWeapon(AWeapon* LastWeapon);	
 public:
-	
+	 void SetOverLappingWeapon(AWeapon* Weapon);
 	
 };
