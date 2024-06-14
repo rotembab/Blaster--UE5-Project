@@ -23,6 +23,7 @@ public:
 	virtual void PostInitializeComponents() override;
 protected:
 	virtual void BeginPlay() override;
+	//Input Section:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* InputMappingContext;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -33,14 +34,17 @@ protected:
 	UInputAction* MoveAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* EquipAction;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CrouchAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AimAction;
 
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 	void Equip(const FInputActionValue& Value);
 	void CrouchBtn(const FInputActionValue& Value);
+	void AimPressed(const FInputActionValue& Value);
+	void AimReleased(const FInputActionValue& Value);
 private:
 	UPROPERTY(VisibleAnywhere, Category=Camera)
 	class USpringArmComponent* CameraBoom;
@@ -55,9 +59,7 @@ private:
 
 	UFUNCTION()
 	void OnRep_OverLappingWeapon(AWeapon* LastWeapon);
-
-
-
+	
 	UPROPERTY(VisibleAnywhere)
 	class UCombatComponent* Combat;
 
@@ -65,7 +67,8 @@ private:
 	void ServerEquipButtonPressed();
 
 public:
-	 void SetOverLappingWeapon(AWeapon* Weapon);
+	void SetOverLappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
+	bool IsAiming();
 	
 };
