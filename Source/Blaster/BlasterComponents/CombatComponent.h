@@ -29,11 +29,14 @@ protected:
 
 private:
 	ABlasterCharacter* Character;
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing=OnRep_EquippedWeapon)
 	 AWeapon* EquippedWeapon;
 
 	UPROPERTY(Replicated)
 	bool bAiming;
+
+	UFUNCTION()
+	void OnRep_EquippedWeapon();
 	
 public:	
 	
